@@ -4,11 +4,17 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { FontLoader } from "three/addons/loaders/FontLoader.js";
 import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
 
+function quaternionFromYAngle(angle) {
+    const quat = new THREE.Quaternion();
+    return quat.setFromAxisAngle(new THREE.Vector3( 0, 1, 0 ), angle);
+}
+
 export default class TennentsFlow {
 
     constructor() {
 
-        this.signs = []
+        this.signs = [];
+        this.mixers = [];
 
         this.#addClock();
         this.#addScene();
@@ -64,19 +70,45 @@ export default class TennentsFlow {
 
         // adding the pub model
 
-        const newPub = this.models.default.scene.clone();
+        const newPub = this.models.default.clone();
         newPub.position.setX(x);
         newPub.position.setZ(z);
         this.scene.add(newPub);
 
         // adding its name
 
+        const rotationTrack = new THREE.QuaternionKeyframeTrack(
+            ".quaternion", [0, 5, 10], [
+                quaternionFromYAngle(0).toArray(),
+                quaternionFromYAngle(Math.PI).toArray(),
+                quaternionFromYAngle(Math.PI*2).toArray()
+            ].flat()
+        );
+
+        const bobTrack = new THREE.VectorKeyframeTrack(
+            ".position", [0, 1, 2], [x, 0, z, x, 0.3, z, x, 0, z]
+        );
+
+        const clip = new THREE.AnimationClip(
+            "pubNameBob",
+            -1, // -1 means auto
+            [bobTrack, rotationTrack]
+        );
+
         const name = {
-            geometry: new TextGeometry(pubName, this.fonts.default).translate(-0.5, 0, 0),
+            geometry: new TextGeometry(pubName, this.fonts.default).center(),
             material: new THREE.MeshBasicMaterial({ color: 0x0E0E0E })
         }
 
         const nameMesh = new THREE.Mesh(name.geometry, name.material);
+
+        const mixer = new THREE.AnimationMixer(nameMesh);
+
+        console.log(nameMesh);
+        this.mixers.push(mixer);
+        const action = mixer.clipAction(clip);
+        action.setEffectiveTimeScale(0.5);
+        action.play();
 
         nameMesh.position.setX(x);
         nameMesh.position.setZ(z);
@@ -107,12 +139,18 @@ export default class TennentsFlow {
         const delta = this.clock.getDelta();
         this.flyControls.update(delta);
 
-        // bob the signs
+        // // bob the signs
 
-        this.signs.forEach(sign => {
-            // console.log(sign);
-            sign.rotateY(0.01);
-            // sign.pos
+        // this.signs.forEach(sign => {
+        //     // console.log(sign);
+        //     sign.rotateY(0.01);
+        //     // sign.pos
+        // });
+
+        // mixesr 
+
+        this.mixers.forEach(mixer => {
+            mixer.update(delta);
         });
 
         // render it
@@ -168,11 +206,13 @@ export default class TennentsFlow {
     
                 // called when the resource is loaded
                 (gltf) => {
-                    const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
-                    gltf.scene.scale.setScalar(1/Object.values(boundingBox.max).sort()[0]); // normalise to 1 unit
-                    gltf.scene.position.set(0, -1.01, 0);
+                    const pub = gltf.scene;
+                    const boundingBox = new THREE.Box3().setFromObject(pub);
+                    pub.scale.setScalar(1/Object.values(boundingBox.max).sort()[0]); // normalise to 1 unit
+                    console.trace(pub);
+                    pub.position.set(0, -1.01, 0);
                     const models = {
-                        default: gltf
+                        default: pub
                     }
                     res(models);
                 },
