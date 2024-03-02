@@ -9,6 +9,36 @@ function quaternionFromYAngle(angle) {
     return quat.setFromAxisAngle(new THREE.Vector3( 0, 1, 0 ), angle);
 }
 
+export function formatStringIndent(inputString, maxCharacters) {
+    const words = inputString.split(' ');
+
+    let resultantString = [];
+    resultantString.push("");
+
+    for (const word of words) {
+        let lastLine = resultantString[resultantString.length - 1];
+
+        if (lastLine.length >= maxCharacters) {
+            resultantString.push("");
+            lastLine = resultantString[resultantString.length - 1];
+        }
+
+        if (lastLine !== "" && lastLine.length + word.length > maxCharacters) {
+            resultantString.push("");
+            lastLine = resultantString[resultantString.length - 1];
+        }
+
+        lastLine += `${word} `;
+        resultantString[resultantString.length - 1] = lastLine;
+    }
+
+    return resultantString.map(line => {
+        const l = line.replace(/~+$/, '')
+        const padding = maxCharacters - l.length / 2;
+        return `${" ".repeat(padding)}${l}${" ".repeat(padding)}`
+    }).join("\n");
+}
+
 export default class TennentsFlow {
 
     constructor() {
@@ -96,7 +126,7 @@ export default class TennentsFlow {
         );
 
         const name = {
-            geometry: new TextGeometry(pubName, this.fonts.default).center(),
+            geometry: new TextGeometry(formatStringIndent(pubName, 10), this.fonts.default).center(),
             material: new THREE.MeshBasicMaterial({ color: 0x0E0E0E })
         }
 
@@ -114,8 +144,6 @@ export default class TennentsFlow {
 
         this.signs.push(nameMesh);
         this.scene.add(nameMesh);
-
-
     }
 
     #addScene() {
@@ -238,9 +266,7 @@ export default class TennentsFlow {
     }
 
     #addLighting() {
-
         // ==== Lighting ====
-
         const light = new THREE.AmbientLight( 0xFFFFFF ); // soft white light
         this.scene.add(light);
 
