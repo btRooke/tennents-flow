@@ -1,10 +1,14 @@
 import * as THREE from "three";
 import { FlyControls } from "three/addons/controls/FlyControls.js";
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { FontLoader } from "three/addons/loaders/FontLoader.js";
+import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
 
 export default class TennentsFlow {
 
     constructor() {
+
+        this.signs = []
 
         this.#addClock();
         this.#addScene();
@@ -18,13 +22,68 @@ export default class TennentsFlow {
 
     async loadModels() {
         this.models = await this.#loadPubModels();
+        this.fonts = await this.#loadFonts();
     }
 
-    addPub(x, z) {
+    #loadFonts() {
+
+        return new Promise((res, rej) => {
+
+            const loader = new FontLoader();
+
+            loader.load(
+                
+                "fonts/concert_one.json",
+                
+                (font) => {
+
+                    res({
+                        default: {
+                            font: font,
+                            size: 0.2,
+                            height: 0.04,
+                            curveSegments: 12,
+                            bevelEnabled: true,
+                            bevelThickness: 0,
+                            bevelSize: 0,
+                            bevelOffset: 0,
+                            bevelSegments: 5
+                        }
+                    });
+
+                }
+                
+                
+            );
+
+        });
+
+    }
+
+    addPub(pubName, x, z) {
+
+        // adding the pub model
+
         const newPub = this.models.default.scene.clone();
         newPub.position.setX(x);
         newPub.position.setZ(z);
         this.scene.add(newPub);
+
+        // adding its name
+
+        const name = {
+            geometry: new TextGeometry(pubName, this.fonts.default).translate(-0.5, 0, 0),
+            material: new THREE.MeshBasicMaterial({ color: 0x0E0E0E })
+        }
+
+        const nameMesh = new THREE.Mesh(name.geometry, name.material);
+
+        nameMesh.position.setX(x);
+        nameMesh.position.setZ(z);
+
+        this.signs.push(nameMesh);
+        this.scene.add(nameMesh);
+
 
     }
 
@@ -38,9 +97,26 @@ export default class TennentsFlow {
     }
 
     #animate() {
-        const delta = this.clock.getDelta();
+
+        // dunno
+
         requestAnimationFrame(() => this.#animate());
+    
+        // fly camera shit
+
+        const delta = this.clock.getDelta();
         this.flyControls.update(delta);
+
+        // bob the signs
+
+        this.signs.forEach(sign => {
+            // console.log(sign);
+            sign.rotateY(0.01);
+            // sign.pos
+        });
+
+        // render it
+
         this.renderer.render(this.scene, this.camera);
     }
 
@@ -79,10 +155,8 @@ export default class TennentsFlow {
         this.camera.lookAt(0, 0, 0);
     }
 
-    #loadPubModels() {
+     #loadPubModels() {
 
-        console.trace("Here");
-        
         return new Promise((res, rej) => {
 
             const loader = new GLTFLoader();

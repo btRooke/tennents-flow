@@ -8,9 +8,9 @@ if ( WebGL.isWebGLAvailable() ) {
 	const flow = new TennentsFlow();
     await flow.loadModels();
 
-    flow.addPub(-1, -1);
-    flow.addPub(1, 1);
-    flow.addPub(0, 0);
+    flow.addPub("Aikmans", -1, -1);
+    flow.addPub("Whey Pat", 1, 1);
+    flow.addPub("The Keys", 0, 0);
     
 }
 
