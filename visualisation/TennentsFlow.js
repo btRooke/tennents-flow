@@ -295,7 +295,6 @@ export default class TennentsFlow {
         this.scene.add(xLine);
         this.scene.add(yLine);
         this.scene.add(zLine);
-
     }
 
 

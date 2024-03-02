@@ -7,4 +7,4 @@ maps/__init__.py
 maps/map_types.py
 maps/maps.py
 simsocket/__init__.py
-simsocket/sim.py
+simsocket/server.py
