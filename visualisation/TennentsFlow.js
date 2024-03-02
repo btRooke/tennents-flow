@@ -16,16 +16,12 @@ export default class TennentsFlow {
         this.#animate();
     }
 
-    async addPub(x, z) {
+    async loadModels() {
+        this.models = await this.#loadPubModels();
+    }
 
-        console.log(this);
-        
-        if (!this.models) {
-            this.models = await this.#loadPubModels();
-        }
-
+    addPub(x, z) {
         const newPub = this.models.default.scene.clone();
-        console.log(newPub);
         newPub.position.setX(x);
         newPub.position.setZ(z);
         this.scene.add(newPub);
@@ -84,6 +80,8 @@ export default class TennentsFlow {
     }
 
     #loadPubModels() {
+
+        console.trace("Here");
         
         return new Promise((res, rej) => {
 

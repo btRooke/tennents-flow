@@ -4,10 +4,14 @@ import TennentsFlow from "./TennentsFlow.js";
 // ==== Startup ====
 
 if ( WebGL.isWebGLAvailable() ) {
+
 	const flow = new TennentsFlow();
+    await flow.loadModels();
+
     flow.addPub(-1, -1);
     flow.addPub(1, 1);
     flow.addPub(0, 0);
+    
 }
 
 else {
