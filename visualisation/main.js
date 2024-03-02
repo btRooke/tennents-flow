@@ -104,8 +104,8 @@ loader.load(
 
 	// called when the resource is loaded
 	function (gltf) {
-        console.log(gltf);
-        gltf.scene.scale.setScalar(0.1);
+        const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
+        gltf.scene.scale.setScalar(1/Object.values(boundingBox.max).sort()[0]); // normalise to 1 unit
         gltf.scene.position.set(-1, -1, -1);
         scene.add(gltf.scene);
 	},
