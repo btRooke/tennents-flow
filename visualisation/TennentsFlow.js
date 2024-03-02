@@ -38,9 +38,9 @@ export default class TennentsFlow {
             const loader = new FontLoader();
 
             loader.load(
-                
+
                 "fonts/concert_one.json",
-                
+
                 (font) => {
 
                     res({
@@ -58,8 +58,8 @@ export default class TennentsFlow {
                     });
 
                 }
-                
-                
+
+
             );
 
         });
@@ -123,7 +123,7 @@ export default class TennentsFlow {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xAFF8E6)
     }
-    
+
     #addClock() {
         this.clock = new THREE.Clock();
     }
@@ -133,7 +133,7 @@ export default class TennentsFlow {
         // dunno
 
         requestAnimationFrame(() => this.#animate());
-    
+
         // fly camera shit
 
         const delta = this.clock.getDelta();
@@ -200,10 +200,10 @@ export default class TennentsFlow {
             const loader = new GLTFLoader();
 
             loader.load(
-    
+
                 // resource URL
                 "assets/cartoon_pub.glb",
-    
+
                 // called when the resource is loaded
                 (gltf) => {
                     const pub = gltf.scene;
@@ -216,12 +216,12 @@ export default class TennentsFlow {
                     }
                     res(models);
                 },
-    
+
                 // called while loading is progressing
                 (xhr) => {
                     console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
                 },
-    
+
                 // called when loading has errors
                 (error) => {
                     console.log(error);
@@ -295,9 +295,9 @@ export default class TennentsFlow {
         this.scene.add(xLine);
         this.scene.add(yLine);
         this.scene.add(zLine);
-        
+
     }
 
-    
+
 
 }

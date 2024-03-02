@@ -1,16 +1,18 @@
 import googlemaps
 from maps import map_types
+import os
 
 class GoogleMapsQuery():
-    def __init__(self, api_key) -> None:
+    def __init__(self) -> None:
+        api_key: str = os.environ['KEY']
         self.g_client: googlemaps.Client = googlemaps.Client(key=api_key)
 
     def _construct_pub(self, g_bar) -> map_types.Pub:
         the_pub = map_types.Pub()
 
-        long_lat_dict = the_pub['geometry']['location']
-        the_pub.coordinates = [long_lat_dict['lat'], long_lat_dict['lang']]
-        the_pub.name = the_pub['name']
+        long_lat_dict = g_bar['geometry']['location']
+        the_pub.coordinates = [long_lat_dict['lat'], long_lat_dict['lng']]
+        the_pub.name = g_bar['name']
         the_pub.average_stay = 0
         the_pub.average_wait = 0
         the_pub.capacity = 0
