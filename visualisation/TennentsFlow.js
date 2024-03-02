@@ -6,39 +6,49 @@ export default class TennentsFlow {
 
     constructor() {
 
-        // ==== Scene ====
+        this.#addClock();
+        this.#addScene();
+        this.#addRenderer();
+        this.#addCamera();
+        this.#addLand();
+        this.#addAxes();
+        this.#addLighting();
+        this.#animate();
+    }
 
-        this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0xAFF8E6)
+    async addPub(x, z) {
 
-        // test
+        console.log(this);
+        
+        if (!this.models) {
+            this.models = await this.#loadPubModels();
+        }
 
-        this.addRenderer();
-        this.addCamera();
-        this.addLand();
-        this.addAxes();
-        this.addLighting();
-        this.addPub();
-
-        // clock 
-
-        this.clock = new THREE.Clock()
-
-        // start anim
-
-        this.animate();
-
+        const newPub = this.models.default.scene.clone();
+        console.log(newPub);
+        newPub.position.setX(x);
+        newPub.position.setZ(z);
+        this.scene.add(newPub);
 
     }
 
-    animate() {
+    #addScene() {
+        this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0xAFF8E6)
+    }
+    
+    #addClock() {
+        this.clock = new THREE.Clock();
+    }
+
+    #animate() {
         const delta = this.clock.getDelta();
-        requestAnimationFrame(() => this.animate());
+        requestAnimationFrame(() => this.#animate());
         this.flyControls.update(delta);
         this.renderer.render(this.scene, this.camera);
     }
 
-    addRenderer() {
+    #addRenderer() {
         const windowScale = 0.8;
 
         this.renderer = new THREE.WebGLRenderer({
@@ -53,7 +63,7 @@ export default class TennentsFlow {
         document.body.appendChild(this.renderer.domElement);
     }
 
-    addCamera() {
+    #addCamera() {
         // ==== Camera ====
 
         this.camera = new THREE.PerspectiveCamera(
@@ -67,45 +77,51 @@ export default class TennentsFlow {
         this.flyControls.dragToLook = true;
         this.flyControls.rollSpeed = 0.5;
 
-        this.camera.position.y = 3;
+        this.camera.position.x = 0.5;
+        this.camera.position.y = 0.5;
+        this.camera.position.z = 3;
         this.camera.lookAt(0, 0, 0);
     }
 
-    addPub() {
+    #loadPubModels() {
         
-        // ==== GLTF Loader ====
+        return new Promise((res, rej) => {
 
-        const loader = new GLTFLoader();
+            const loader = new GLTFLoader();
 
-        loader.load(
+            loader.load(
+    
+                // resource URL
+                "assets/cartoon_pub.glb",
+    
+                // called when the resource is loaded
+                (gltf) => {
+                    const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
+                    gltf.scene.scale.setScalar(1/Object.values(boundingBox.max).sort()[0]); // normalise to 1 unit
+                    gltf.scene.position.set(0, -1.01, 0);
+                    const models = {
+                        default: gltf
+                    }
+                    res(models);
+                },
+    
+                // called while loading is progressing
+                (xhr) => {
+                    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+                },
+    
+                // called when loading has errors
+                (error) => {
+                    console.log(error);
+                    rej(error);
+                }
+            );
 
-            // resource URL
-            "assets/cartoon_pub.glb",
-
-            // called when the resource is loaded
-            (gltf) => {
-                const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
-                gltf.scene.scale.setScalar(1/Object.values(boundingBox.max).sort()[0]); // normalise to 1 unit
-                gltf.scene.position.set(-1, -1.008, -1);
-                this.scene.add(gltf.scene);
-            },
-
-            // called while loading is progressing
-            (xhr) => {
-                console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-            },
-
-            // called when loading has errors
-            (error) => {
-                console.log(error);
-            }
-        );
-
-        // TODO sort this out
+        });
 
     }
 
-    addLighting() {
+    #addLighting() {
 
         // ==== Lighting ====
 
@@ -114,7 +130,7 @@ export default class TennentsFlow {
 
     }
 
-    addLand() {
+    #addLand() {
 
         // ==== Land ====
 
@@ -131,7 +147,7 @@ export default class TennentsFlow {
 
     }
 
-    addAxes() {
+    #addAxes() {
 
         // ==== Axes ====
 

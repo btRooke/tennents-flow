@@ -5,9 +5,12 @@ import TennentsFlow from "./TennentsFlow.js";
 
 if ( WebGL.isWebGLAvailable() ) {
 	const flow = new TennentsFlow();
+    flow.addPub(-1, -1);
+    flow.addPub(1, 1);
+    flow.addPub(0, 0);
 }
 
 else {
 	const warning = WebGL.getWebGLErrorMessage();
-	document.getElementById( 'container' ).appendChild( warning );
+    alert("WebGL not working innit.")
 }
