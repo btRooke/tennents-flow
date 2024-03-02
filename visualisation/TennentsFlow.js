@@ -126,7 +126,7 @@ export default class TennentsFlow {
         );
 
         const name = {
-            geometry: new TextGeometry(pubName, this.fonts.default).center(),
+            geometry: new TextGeometry(formatStringIndent(pubName, 10), this.fonts.default).center(),
             material: new THREE.MeshBasicMaterial({ color: 0x0E0E0E })
         }
 
@@ -145,8 +145,6 @@ export default class TennentsFlow {
 
         this.signs.push(nameMesh);
         this.scene.add(nameMesh);
-
-
     }
 
     #addScene() {
@@ -264,9 +262,7 @@ export default class TennentsFlow {
     }
 
     #addLighting() {
-
         // ==== Lighting ====
-
         const light = new THREE.AmbientLight( 0xFFFFFF ); // soft white light
         this.scene.add(light);
 
