@@ -4,13 +4,13 @@ py-sim.py:
 """
 
 # System library imports
-import os
 import sys
 import datetime
 
 # Program class imports
 from map import Map
 from utils import utils
+from data import standrewsvenues
 
 # Individual class imports
 from argparse import ArgumentParser
@@ -69,16 +69,16 @@ if __name__ == "__main__":
     # Parse the command line args
     args = sim_cmd()
     n = args.num_agents
-    venues = utils.load_venue_data(args.venues)
+    venues = standrewsvenues.ST_A_VENUES
+
     # Construct the simulation map
-    map = Map(num_agents = n, venue_list= venues, random_seed= args.seed)
+    pub_map = Map.Map(num_agents=50, venues=venues, seed=3829382932)
 
     # Run the simulation
     for i in range(60*9):
-        map.step()
-        map.send_to_tim()
+        pub_map.step()
+        pub_map.send_to_tim()
 
     # Save the final simulation output paramters.
-    map.out(data=map.get_parameters(), output_path=f"output\{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}\parameters", output_format="json")
-
+    # pub_map.out(data=map.get_parameters(), output_path=f"output\{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}\parameters", output_format="json")
     print("pub-sim.py!")

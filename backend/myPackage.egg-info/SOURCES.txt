@@ -1,0 +1,9 @@
+setup.py
+maps/__init__.py
+maps/maps.py
+myPackage.egg-info/PKG-INFO
+myPackage.egg-info/SOURCES.txt
+myPackage.egg-info/dependency_links.txt
+myPackage.egg-info/top_level.txt
+simsocket/__init__.py
+simsocket/sim.py

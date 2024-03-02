@@ -7,7 +7,6 @@ import random
 from agents import Agent
 
 class Map:
-
     def __init__(self, num_agents, venues, seed):
         """
         Central class for storing a state of the simulation at timestep t
@@ -38,8 +37,8 @@ class Map:
 
         total_agents = self.total_agents
         for agent_id in range(total_agents):
-            random.seed(self.random_seed + agent_id)
-            agent = Agent(random_seed=self.random_seed)
+            random.seed(self.seed + agent_id)
+            agent = Agent(random_seed=self.seed)
             agent.initialize_agent(
                 agent_id=agent_id,
                 archetype_distribution=archetype_distribution,
@@ -47,3 +46,8 @@ class Map:
             )
             self.agents.update({agent_id: agent})
 
+    def step(self):
+        pass
+
+    def send_to_tim(self):
+        pass
