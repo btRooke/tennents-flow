@@ -70,7 +70,7 @@ export default class TennentsFlow {
 
         // adding the pub model
 
-        const newPub = this.models.default.clone();
+        const newPub = this.models.small.clone();
         newPub.position.setX(x);
         newPub.position.setZ(z);
         this.scene.add(newPub);
@@ -104,7 +104,6 @@ export default class TennentsFlow {
 
         const mixer = new THREE.AnimationMixer(nameMesh);
 
-        console.log(nameMesh);
         this.mixers.push(mixer);
         const action = mixer.clipAction(clip);
         action.setEffectiveTimeScale(0.5);
@@ -121,7 +120,7 @@ export default class TennentsFlow {
 
     #addScene() {
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0xAFF8E6)
+        this.scene.background = new THREE.Color(0xAFF8E6);
     }
 
     #addClock() {
@@ -138,14 +137,6 @@ export default class TennentsFlow {
 
         const delta = this.clock.getDelta();
         this.flyControls.update(delta);
-
-        // // bob the signs
-
-        // this.signs.forEach(sign => {
-        //     // console.log(sign);
-        //     sign.rotateY(0.01);
-        //     // sign.pos
-        // });
 
         // mixesr 
 
@@ -186,6 +177,7 @@ export default class TennentsFlow {
         this.flyControls = new FlyControls(this.camera, document.body);
         this.flyControls.dragToLook = true;
         this.flyControls.rollSpeed = 0.5;
+        this.flyControls.movementSpeed = 2;
 
         this.camera.position.x = 0.5;
         this.camera.position.y = 0.5;
@@ -195,39 +187,51 @@ export default class TennentsFlow {
 
      #loadPubModels() {
 
-        return new Promise((res, rej) => {
+        return new Promise(async (res, rej) => {
 
             const loader = new GLTFLoader();
 
-            loader.load(
+            const pubs = [
+                { file: "assets/cartoon_pub.glb", key: "default" },
+                { file: "assets/small_pub.glb", key: "small" },
+                { file: "assets/large_pub.glb", key: "large" },
+            ];
 
-                // resource URL
-                "assets/cartoon_pub.glb",
+            let loadingPromises = pubs.map(p => {
 
-                // called when the resource is loaded
-                (gltf) => {
-                    const pub = gltf.scene;
-                    const boundingBox = new THREE.Box3().setFromObject(pub);
-                    pub.scale.setScalar(1/Object.values(boundingBox.max).sort()[0]); // normalise to 1 unit
-                    console.trace(pub);
-                    pub.position.set(0, -1.01, 0);
-                    const models = {
-                        default: pub
-                    }
-                    res(models);
-                },
+                return new Promise(res => {
 
-                // called while loading is progressing
-                (xhr) => {
-                    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-                },
+                    loader.load(
+                        p.file,
+                        (gltf) => {
+                            const pub = gltf.scene;
+                            const boundingBox = new THREE.Box3().setFromObject(pub);
+                            pub.scale.setScalar(1/Object.values(boundingBox.max).sort().reverse()[0]); // normalise to 1 unit
+                            console.trace(pub);
+                            pub.position.set(0, -1.01, 0);
+                            res(pub);
+                        },
+                        (xhr) => {
+                            console.log(`${p.file} %${(xhr.loaded/xhr.total*100)}} loaded`);
+                        },
+                        (error) => {
+                            console.error(error);
+                        }
+                    );
 
-                // called when loading has errors
-                (error) => {
-                    console.log(error);
-                    rej(error);
-                }
-            );
+                });
+
+            });
+
+            let models = {};
+
+            for (let index in pubs) {
+                models[pubs[index].key] = await loadingPromises[index];
+            }
+
+            console.log(models);
+
+            res(models);
 
         });
 
@@ -240,19 +244,24 @@ export default class TennentsFlow {
         const light = new THREE.AmbientLight( 0xFFFFFF ); // soft white light
         this.scene.add(light);
 
+        const pointLight = new THREE.PointLight(0xFF0000, 500, 0, 2);
+        pointLight.castShadow = true;
+        pointLight.position.set(5, 1, 1);
+        this.scene.add(pointLight);
+
     }
 
     #addLand() {
 
         // ==== Land ====
 
-        const planeSize = 10;
+        const planeSize = 21;
         const plane = {
             geometry: new THREE.PlaneGeometry(planeSize, planeSize)
                         .rotateX(Math.PI/2)
                         .translate(0, -1, 0),
 
-            material: new THREE.MeshBasicMaterial({ color: 0x03B003, side: THREE.DoubleSide })
+            material: new THREE.MeshLambertMaterial({ color: 0x03B003, side: THREE.DoubleSide })
         }
 
         this.scene.add(new THREE.Mesh(plane.geometry, plane.material));
