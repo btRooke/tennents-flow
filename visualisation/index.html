@@ -5,6 +5,7 @@
         <meta charset="utf-8">
         <title>TennentsFlow</title>
         <style>
+
             body {
                 margin: 0;
                 padding: 0;
@@ -14,13 +15,20 @@
                 align-items: center;
                 height: 100vh;
             }
+
+            #nextStepButton {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+            }
+
         </style>
     </head>
 
     <body>
-        <h2>TennentsFlow</h2>
-
-        <input type="button" value="Next Step" id="nextStepButton" />
+        <div id="tfdiv">
+            <input type="button" value="Next Step" id="nextStepButton"/>
+        </div>
         <script type="module" src="TennentsFlow.js"></script>
         <script type="module" src="main.js"></script>
     </body>

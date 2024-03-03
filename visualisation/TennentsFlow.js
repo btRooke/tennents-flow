@@ -217,7 +217,7 @@ export default class TennentsFlow {
             window.innerHeight * windowScale
         );
 
-        document.body.appendChild(this.renderer.domElement);
+        document.querySelector("#tfdiv").appendChild(this.renderer.domElement);
     }
 
     #addCamera() {
@@ -248,9 +248,9 @@ export default class TennentsFlow {
             const loader = new GLTFLoader();
 
             const pubs = [
-                { file: "assets/cartoon_pub.glb", key: "default" },
-                { file: "assets/small_pub.glb", key: "small" },
-                { file: "assets/large_pub.glb", key: "large" },
+                { file: "assets/cartoon_pub.glb", key: "default", scale: 0.85 },
+                { file: "assets/small_pub.glb", key: "small", scale: 0.4 },
+                { file: "assets/large_pub.glb", key: "large", scale: 0.7 },
             ];
 
             let loadingPromises = pubs.map(p => {
@@ -263,7 +263,7 @@ export default class TennentsFlow {
                             const pub = gltf.scene;
                             const boundingBox = new THREE.Box3().setFromObject(pub);
                             // no idea why I had to write my own function here
-                            pub.scale.setScalar(1 / largest(Object.values(boundingBox.max))); // normalise to 1 unit
+                            pub.scale.setScalar((1 / largest(Object.values(boundingBox.max))*p.scale)); // normalise to 1 unit
                             pub.position.set(0, -1.01, 0);
 
                             let meshes = []
@@ -377,4 +377,5 @@ export default class TennentsFlow {
 
     moveActors(srcPub, destPub, numberActors) {
     }
+
 }
