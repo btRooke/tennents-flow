@@ -13,17 +13,12 @@ function inc() {
 }
 
 if ( WebGL.isWebGLAvailable() ) {
-	flow = new TennentsFlow();
+    flow = new TennentsFlow();
     await flow.loadModels();
-
     socket = new TennentsFlowSocket(flow);
-
     document.getElementById("nextStepButton").onclick = e => socket.sendNextStep();
-    setTimeout(() => {
-        flow.moveActors("Toastie Bar", "Greyfriars Inn", 5);
-        inc();
-    }, 10000);
 
+    setInterval(() => socket.sendNextStep(), 2200);
 }
 
 else {

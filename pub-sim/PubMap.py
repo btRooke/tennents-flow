@@ -3,9 +3,9 @@ PubMap.py
 - Contains the class required to instantiate the world maps
 """
 
-from utils import utils
-from Agent import Agent
-from Venue import Venue
+from pubsim.utils import utils
+from pubsim.Agent import Agent
+from pubsim.Venue import Venue
 
 import numpy as np
 import pandas as pd

@@ -70,20 +70,6 @@
         "closing_time": "12:45"
     },
     {
-        "name": "Molly Malones",
-        "classification": "Large Pub",
-        "average_stay": 90,
-        "popularity": 8,
-        "location": {
-            "lat": 56.3444855,
-            "lng": -2.8114455
-        },
-        "capacity": 120,
-        "drink_cost": 4.0,
-        "average_wait": 20,
-        "closing_time": "00:30"
-    },
-    {
         "name": "The Rule",
         "classification": "Large",
         "average_stay": 120,
@@ -110,20 +96,6 @@
         "drink_cost": 5.5,
         "average_wait": 20,
         "closing_time": "00:30"
-    },
-    {
-        "name": "St Andrews Student Union",
-        "classification": "Union",
-        "average_stay": 150,
-        "popularity": 10,
-        "location": {
-            "lat": 56.3444855,
-            "lng": -2.8114455
-        },
-        "capacity": 400,
-        "drink_cost": 3.5,
-        "average_wait": 20,
-        "closing_time": "00:00"
     },
     {
         "name": "The Vic",
