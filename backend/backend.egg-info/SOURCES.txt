@@ -6,5 +6,14 @@ backend.egg-info/top_level.txt
 maps/__init__.py
 maps/map_types.py
 maps/maps.py
+pubsim/Agent.py
+pubsim/PubMap.py
+pubsim/Venue.py
+pubsim/__init__.py
+pubsim/setup.py
+pubsim/sim.py
+pubsim/example/__init__.py
+pubsim/utils/__init__.py
+pubsim/utils/utils.py
 simsocket/__init__.py
 simsocket/server.py
