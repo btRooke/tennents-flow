@@ -420,8 +420,8 @@ export default class TennentsFlow {
     }
 
     displayRevenue(pubName, amount) {
-        const aString = ` Count: ${Number(amount)}`;
-        this.signs[pubName].geometry = new TextGeometry(formatStringIndent(pubName + aString, 12), this.fonts.default).center();
+        const aString = ` Income: £${Number(amount)}`;
+        this.signs[pubName].geometry = new TextGeometry(formatStringIndent(pubName + aString, 13), this.fonts.default).center();
     }
 
     moveActors(srcPub, destPub, numberActors) {
