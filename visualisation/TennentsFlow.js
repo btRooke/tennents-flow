@@ -51,7 +51,7 @@ export default class TennentsFlow {
         this.#addRenderer();
         this.#addCamera();
         this.#addLand();
-        this.#addAxes();
+        // this.#addAxes();
         this.#addLighting();
         this.#animate();
     }
@@ -103,6 +103,7 @@ export default class TennentsFlow {
         const newPub = this.models.small.clone();
         newPub.position.setX(x);
         newPub.position.setZ(z);
+        newPub.rotateY(Math.random() * 2 * Math.PI);
         this.scene.add(newPub);
 
         // adding its name
@@ -304,7 +305,7 @@ export default class TennentsFlow {
 
         // ==== Land ====
 
-        const planeSize = 21;
+        const planeSize = 1000;
         const plane = {
             geometry: new THREE.PlaneGeometry(planeSize, planeSize)
                         .rotateX(Math.PI/2)
