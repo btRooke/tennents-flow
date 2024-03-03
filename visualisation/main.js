@@ -13,7 +13,7 @@ let tickCount = 0;
 
 function setTickPeriod(period) {
     tickPeriod = period;
-    document.querySelector("#tickRate").innerText = `Tick Rate: ${tickPeriod}`
+    document.querySelector("#tickRate").innerText = `Tick Rate: ${(60/(tickPeriod/1000)).toFixed(2)} t/m`
 }
 
 function addMinutes(date, minutes) {
