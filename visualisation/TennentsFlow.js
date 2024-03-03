@@ -194,7 +194,7 @@ export default class TennentsFlow {
         const delta = this.clock.getDelta();
         this.flyControls.update(delta);
 
-        // mixesr 
+        // mixesr
 
         this.mixers.forEach(mixer => {
             mixer.update(delta);
@@ -371,6 +371,10 @@ export default class TennentsFlow {
         this.scene.add(zLine);
     }
 
+    displayRevenue(pubName, amount) {
+        // TODO:
+    }
 
-
+    moveActors(srcPub, destPub, numberActors) {
+    }
 }
