@@ -9,6 +9,20 @@ function quaternionFromYAngle(angle) {
     return quat.setFromAxisAngle(new THREE.Vector3( 0, 1, 0 ), angle);
 }
 
+function largest(elements) {
+
+    let largest = -999999;
+
+    for (let e of elements) {
+        if (e > largest) {
+            largest = e;
+        }
+    }
+
+    return largest;
+
+}
+
 export function formatStringIndent(inputString, maxCharacters) {
     const words = inputString.split(' ');
 
@@ -100,7 +114,9 @@ export default class TennentsFlow {
 
         // adding the pub model
 
-        const newPub = this.models.small.clone();
+        const keys = Object.keys(this.models);
+        const key = keys[Math.floor(keys.length * Math.random())];
+        const newPub = this.models[key].clone();
         newPub.position.setX(x);
         newPub.position.setZ(z);
         newPub.rotateY(Math.random() * 2 * Math.PI);
@@ -190,7 +206,7 @@ export default class TennentsFlow {
     }
 
     #addRenderer() {
-        const windowScale = 0.8;
+        const windowScale = 1;
 
         this.renderer = new THREE.WebGLRenderer({
             antialias: true
@@ -246,7 +262,8 @@ export default class TennentsFlow {
                         (gltf) => {
                             const pub = gltf.scene;
                             const boundingBox = new THREE.Box3().setFromObject(pub);
-                            pub.scale.setScalar(1/Object.values(boundingBox.max).sort().reverse()[0]); // normalise to 1 unit
+                            // no idea why I had to write my own function here
+                            pub.scale.setScalar(1 / largest(Object.values(boundingBox.max))); // normalise to 1 unit
                             pub.position.set(0, -1.01, 0);
 
                             let meshes = []
@@ -264,7 +281,7 @@ export default class TennentsFlow {
                             res(pub);
                         },
                         (xhr) => {
-                            console.log(`${p.file} %${(xhr.loaded/xhr.total*100)}} loaded`);
+                            console.log(`${p.file} ${(xhr.loaded/xhr.total*100)}% loaded`);
                         },
                         (error) => {
                             console.error(error);
@@ -280,8 +297,6 @@ export default class TennentsFlow {
             for (let index in pubs) {
                 models[pubs[index].key] = await loadingPromises[index];
             }
-
-            console.log(models);
 
             res(models);
 
