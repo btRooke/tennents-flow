@@ -5,3 +5,4 @@ env
 node_modules
 __pycache__
 .vite
+pub-sim/pub_sim.egg-info

@@ -1,5 +1,5 @@
 """
-Map.py
+PubMap.py
 - Contains the class required to instantiate the world map
 """
 
