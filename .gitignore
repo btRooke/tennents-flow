@@ -7,3 +7,4 @@ __pycache__
 .vite
 pub-sim/pub_sim.egg-info
 backend/build
+backend/API_KEY
