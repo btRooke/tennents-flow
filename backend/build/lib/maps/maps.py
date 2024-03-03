@@ -11,7 +11,7 @@ class GoogleMapsQuery():
         the_pub = map_types.Pub()
 
         long_lat_dict = the_pub['geometry']['location']
-        the_pub.coordinates = [long_lat_dict['lat'], long_lat_dict['lang']]
+        the_pub.location = [long_lat_dict['lat'], long_lat_dict['lang']]
         the_pub.name = the_pub['name']
         the_pub.average_stay = 0
         the_pub.average_wait = 0

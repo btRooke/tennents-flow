@@ -7,6 +7,9 @@ from utils import utils
 from Agent import Agent
 from Venue import Venue
 
+import numpy as np
+import pandas as pd
+
 
 class PubMap:
 
@@ -26,6 +29,8 @@ class PubMap:
 
         # Dynamic Map Attributes
         self.venues = self.generate_venues(venue_path)
+        self.total_venues = len(self.venues)
+
         self.agents = self.generate_agents(venue_distribution_path)
         self.timestep = 0
 
@@ -54,8 +59,47 @@ class PubMap:
 
         return agents
 
+    def step(self):
+
+        venue_names = list(self.venues.keys()) + ["HOME"]
+        transition_matrix =pd.DataFrame(0, index=venue_names, columns= venue_names)
+
+        for id in range(self.total_agents):
+
+            # Run the simulation step for each agent
+            agent = self.agents[id]
+
+            # Do nothing with retired agents
+            if agent.is_retired():
+                continue
+
+            # If an agent is at a venue, test if it wants to buy a drink, decrement it's wait counters
+            if agent.is_busy():
+                # Determine if agent wants to buy a drink, if so invoke that action.
+                agent.thirsty(self.venues)
+
+                if agent.get_idletime() == 0:
+                    agent.set_busy(False)
+                else:
+                    # Decrement count until the agent will leave the venue
+                    agent.decrement_idletime()
+
+            # If an agent is not at a venue, probabilistically roll to inform the next decision.
+            else:
+                transition = agent.make_decision(self.timestep, self.venues)
+                if transition:
+                    old_place = transition[0]
+                    new_place = transition[1]
+                    transition_matrix.loc[old_place, new_place] += 1
+
+        self.timestep += 1
+
+        revenues = [{name: obj.get_revenue()} for name, obj in self.venues.items()]
+
+        return transition_matrix, revenues
+
     def __str__(self):
-     # Starting with the map's general information
+        # Starting with the map's general information
         map_info = f"PubMap State at Timestep {self.timestep}\n"
         map_info += f"Total Agents: {self.total_agents}, Seed: {self.seed}\n"
 

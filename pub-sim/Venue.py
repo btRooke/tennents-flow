@@ -11,14 +11,13 @@ class Venue:
     self.attendance = 0              # How many agents are currently in the pub. Initialize as zero.
     self.popularity = popularity     # Score out of 10, should influence the probability decision for an agents next choice
     self.drink_cost = drink_cost     # When an agent buys a drink in a pub, decrement its balance by this amount
-    self.wait_time = wait_time       # If the pub is full, this is the advertised wait time before an agent can enter.
+    self.revenue = 0
 
   def __str__(self):
       """Print statement override in case needed for testing."""
       return (f"Venue(Name: {self.name}, Classification: {self.classification}, Average Stay: {self.average_stay}, "
                 f"Location: {self.location}, Closing Time: {self.closing_time}, Capacity: {self.capacity}, "
-                f"Attendance: {self.attendance}, Popularity: {self.popularity}, Drink Cost: {self.drink_cost}, "
-                f"Wait Time: {self.wait_time})")
+                f"Attendance: {self.attendance}, Popularity: {self.popularity}, Drink Cost: {self.drink_cost}")
 
 
 # GET / SET METHODS.
@@ -33,3 +32,17 @@ class Venue:
 
   def remove_customer(self):
       self.attendance -= 1
+
+  def add_purchase(self):
+      self.revenue += self.drink_cost
+
+  def get_price(self):
+      return self.drink_cost
+
+  def get_average_time_spent(self):
+      return self.average_stay
+
+  def get_revenue(self):
+      return self.revenue
+
+

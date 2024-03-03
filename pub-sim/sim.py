@@ -5,16 +5,18 @@ py-sim.py:
 
 # System library imports
 import sys
-import datetime
+
+import pandas as pd
 
 # Program class imports
 from PubMap import PubMap
+from utils import utils
 
 # Individual class imports
 from argparse import ArgumentParser
 
 # Global Variables:
-DURATION = 540
+DURATION = 200
 
 def sim_cmd():
     """
@@ -28,7 +30,7 @@ def sim_cmd():
     """
     # PARSE FOR ALL ARGUMENTS AT COMMAND LINE
     arg_parser = ArgumentParser()
-    arg_parser.add_argument("-n", "--num_agents", type=int, default=10, help="Number of Agents")
+    arg_parser.add_argument("-n", "--num_agents", type=int, default=1000, help="Number of Agents")
     arg_parser.add_argument("-v", "--venue_path", type = str, default = "example\StA_venue_data.json", help="Path to venues file")
     arg_parser.add_argument("-d", "--distribution_path", type = str, default="example\StA_venue_distribution.json", help="Path to start venue probability distribution")
     arg_parser.add_argument("-s", "--seed", type=int, default= 144, help="Random generation seed")
@@ -53,11 +55,11 @@ if __name__ == "__main__":
 
     # Run the simulation
     for i in range(DURATION):
-        pub_map.step()
-        #pub_map.send_to_tim()
-
-    # Save the final simulation output parameters.
-    #pub_map.out(data=pub_map.get_parameters(), output_path=f"output\{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}\parameters", output_format="json")
-
-   # print("sim.py!")
-   # print(pub_map)
+        transition_matrix, revenues = pub_map.step()
+        # send these to tim
+        # Transition matrix is a pandas dataframe
+        # transition_matrix["Aikmans","Whey Pat"] has how many transitions
+        # from aikmans to whey pat in this iteration
+        # revenues is a list of dictionaries of the form
+        # [{"Aikmans": 472}, {"Union": 3484},...
+        # This is the culmulative totals each pub has made on the evening.
