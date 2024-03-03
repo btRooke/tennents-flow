@@ -1,4 +1,4 @@
-import * as THREE from "three";
+    import * as THREE from "three";
 import { FlyControls } from "three/addons/controls/FlyControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { FontLoader } from "three/addons/loaders/FontLoader.js";
@@ -10,7 +10,6 @@ function quaternionFromYAngle(angle) {
 }
 
 function largest(elements) {
-
     let largest = -999999;
 
     for (let e of elements) {
@@ -18,9 +17,7 @@ function largest(elements) {
             largest = e;
         }
     }
-
     return largest;
-
 }
 
 function smallRandom() {
@@ -172,7 +169,6 @@ export default class TennentsFlow {
             -1,
             [rotationTrack]
         )
-
 
         const mixer = new THREE.AnimationMixer(nameMesh);
 

@@ -40,6 +40,12 @@ export default class TennentsFlowSocket {
                 this.tennentsFlow.moveActors(pub1, pub2, numPeople);
             }
         }
+
+        for (const revenue of nextStepEvent.data.revenue) {
+            for (const [pubName, amount] of Object.entries(revenue)) {
+                this.tennentsFlow.displayRevenue(pubName, amount);
+            }
+        }
     }
 
     sendInit = () => {
