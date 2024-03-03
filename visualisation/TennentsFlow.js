@@ -1,4 +1,4 @@
-import * as THREE from "three";
+    import * as THREE from "three";
 import { FlyControls } from "three/addons/controls/FlyControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { FontLoader } from "three/addons/loaders/FontLoader.js";
@@ -10,7 +10,6 @@ function quaternionFromYAngle(angle) {
 }
 
 function largest(elements) {
-
     let largest = -999999;
 
     for (let e of elements) {
@@ -18,9 +17,7 @@ function largest(elements) {
             largest = e;
         }
     }
-
     return largest;
-
 }
 
 function smallRandom() {
@@ -116,15 +113,13 @@ export default class TennentsFlow {
 
     }
 
-    addPub(pubName, x, z) {
+    addPub(pubName, x, z, size="medium") {
 
         this.pubs[pubName] = [x, z];
 
         // adding the pub model
 
-        const keys = Object.keys(this.models);
-        const key = keys[Math.floor(keys.length * Math.random())];
-        const newPub = this.models[key].clone();
+        const newPub = this.models[size].clone();
         newPub.position.setX(x);
         newPub.position.setZ(z);
         newPub.rotateY(Math.random() * 2 * Math.PI);
@@ -174,7 +169,6 @@ export default class TennentsFlow {
             -1,
             [rotationTrack]
         )
-
 
         const mixer = new THREE.AnimationMixer(nameMesh);
 
@@ -310,7 +304,7 @@ export default class TennentsFlow {
             const loader = new GLTFLoader();
 
             const pubs = [
-                { file: "assets/cartoon_pub.glb", key: "default", scale: 0.85 },
+                { file: "assets/cartoon_pub.glb", key: "medium", scale: 0.85 },
                 { file: "assets/small_pub.glb", key: "small", scale: 0.4 },
                 { file: "assets/new_large_pub.glb", key: "large", scale: 0.7 },
             ];
@@ -444,24 +438,24 @@ export default class TennentsFlow {
                 geometry: new THREE.SphereGeometry(0.06, 3, 3).center(),
                 material: new THREE.MeshPhysicalMaterial({ color: 0x0000FF, transparent: true, opacity: 0.5 })
             };
-    
+
             const height = -1 + 0.18;
-    
+
             const ballMesh = new THREE.Mesh(sphere.geometry, sphere.material);
-    
+
             const pubSwap = new THREE.VectorKeyframeTrack(
                 ".position", [0, 2 + smallRandom() * 2], [
                     this.pubs[srcPub][0] + smallRandom(), height, this.pubs[srcPub][1] + smallRandom(),
                     this.pubs[destPub][0] + smallRandom(), height, this.pubs[destPub][1] + smallRandom()
                 ]
             );
-    
+
             const clip = new THREE.AnimationClip(
                 "actorSwap",
                 -1, // -1 means auto
                 [pubSwap]
             );
-    
+
             const mixer = new THREE.AnimationMixer(ballMesh);
             this.mixers.push(mixer);
             const action = mixer.clipAction(clip);
@@ -475,7 +469,7 @@ export default class TennentsFlow {
                 mixer.uncacheAction(action);
                 this.scene.remove(ballMesh);
             });
-    
+
 
         }
 

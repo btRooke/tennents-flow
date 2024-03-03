@@ -31,8 +31,8 @@ def sim_cmd():
     # PARSE FOR ALL ARGUMENTS AT COMMAND LINE
     arg_parser = ArgumentParser()
     arg_parser.add_argument("-n", "--num_agents", type=int, default=1000, help="Number of Agents")
-    arg_parser.add_argument("-v", "--venue_path", type = str, default = "example\StA_venue_data.json", help="Path to venues file")
-    arg_parser.add_argument("-d", "--distribution_path", type = str, default="example\StA_venue_distribution.json", help="Path to start venue probability distribution")
+    arg_parser.add_argument("-v", "--venue_path", type = str, default = "example/StA_venue_data.json", help="Path to venues file")
+    arg_parser.add_argument("-d", "--distribution_path", type = str, default="example/StA_venue_distribution.json", help="Path to start venue probability distribution")
     arg_parser.add_argument("-s", "--seed", type=int, default= 144, help="Random generation seed")
 
     try:
@@ -51,7 +51,10 @@ if __name__ == "__main__":
     venue_distribution_path = args.distribution_path
 
     # Construct the simulation map
-    pub_map = PubMap(num_agents = num_agents, venue_path= venue_path, venue_distribution_path = venue_distribution_path, seed= args.seed)
+    pub_map = PubMap(num_agents = num_agents,
+                    venue_path= venue_path,
+                    venue_distribution_path = venue_distribution_path,
+                    seed= args.seed)
 
     # Run the simulation
     for i in range(DURATION):
@@ -63,3 +66,4 @@ if __name__ == "__main__":
         # revenues is a list of dictionaries of the form
         # [{"Aikmans": 472}, {"Union": 3484},...
         # This is the culmulative totals each pub has made on the evening.
+        print(transition_matrix)

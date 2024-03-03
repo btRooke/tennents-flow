@@ -16,10 +16,42 @@
                 height: 100vh;
             }
 
-            #nextStepButton {
+            .leftside {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: 100%;
+            }
+
+            .flexinner button {
+                padding: 5px;
+            }
+
+            .bottomleftside span {
+                border: 1px solid black;
+                display: block;
+                height: 150px;
+                width: 350px;
+            }
+
+            .bottomleftside {
                 position: absolute;
-                top: 10px;
                 left: 10px;
+                bottom: 10px;
+            }
+
+            .topleftside {
+                position: absolute;
+                margin: 1em;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px
+            }
+
+            * {
+                font-family: 'Courier New', Courier, monospace;
+                font-weight: bold;
             }
 
         </style>
@@ -27,7 +59,16 @@
 
     <body>
         <div id="tfdiv">
-            <input type="button" value="Next Step" id="nextStepButton"/>
+            <div class="topleftside">
+                <div>
+                    <button id="slowDown">&lt;&lt;</button><button id="playPause">Go/Stop</button><button id="speedUp">>></button>
+                </div>
+                <span class="frameCount">Tick rate: 4/s</span>
+                <span class="frameCount">Tick count: 123</span>
+            </div>
+            <div class="bottomleftside">
+                <span></span>   
+            </div>
         </div>
         <script type="module" src="TennentsFlow.js"></script>
         <script type="module" src="main.js"></script>

@@ -1,6 +1,7 @@
 import googlemaps
 from maps import map_types
 import os
+from pubsim.utils import utils
 
 class GoogleMapsQuery():
     def __init__(self) -> None:
@@ -11,7 +12,7 @@ class GoogleMapsQuery():
         the_pub = map_types.Pub()
 
         long_lat_dict = g_bar['geometry']['location']
-        the_pub.location = [long_lat_dict['lat'], long_lat_dict['lng']]
+        the_pub.location = (long_lat_dict['lat'], long_lat_dict['lng'])
         the_pub.name = g_bar['name']
         the_pub.average_stay = 0
         the_pub.average_wait = 0
@@ -32,3 +33,17 @@ class GoogleMapsQuery():
             pubs.append(pub)
 
         return pubs
+
+
+def convert_pubsim(json_file) -> list[map_types.Pub]:
+    pubs = utils.load_json(json_file)
+
+    ret = []
+
+    for pub in pubs:
+        b = map_types.Pub()
+        b.name = pub["name"]
+        b.location = (pub['location']['lat'], pub['location']['lng'])
+        ret.append(b)
+
+    return ret
