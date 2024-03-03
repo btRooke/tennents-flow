@@ -60,7 +60,7 @@ export default class TennentsFlowSocket {
 
         leaderBoard.forEach(l => {
             const li = document.createElement("li");
-            li.innerText = `${l.pubName} - ${l.revenue}`
+            li.innerText = `${l.pubName} - £${l.revenue.toFixed(2)}`
             leaderboardElement.appendChild(li);
         });
     }
