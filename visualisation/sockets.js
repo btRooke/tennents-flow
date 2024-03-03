@@ -28,13 +28,17 @@ export default class TennentsFlowSocket {
     handleInit = (initEvent) => {
         for (const pub of initEvent.pubs) {
             const lat = pub.location[0];
-            const long = pub.location[1];
-            this.tennentsFlow.addPub(pub.name, lat, long);
+        const long = pub.location[1];
+            console.log(pub);
+            this.tennentsFlow.addPub(pub.name, lat, long, pub.size);
         }
         this.id = initEvent.uuid;
     }
 
     handleNextStep = nextStepEvent => {
+
+        const leaderBoard = [];
+
         for (const [pub1, moves] of Object.entries(nextStepEvent.data.agents)) {
             for (const [pub2, numPeople] of Object.entries(moves)) {
                 this.tennentsFlow.moveActors(pub1, pub2, numPeople);
@@ -44,8 +48,20 @@ export default class TennentsFlowSocket {
         for (const revenue of nextStepEvent.data.revenue) {
             for (const [pubName, amount] of Object.entries(revenue)) {
                 this.tennentsFlow.displayRevenue(pubName, amount);
+                leaderBoard.push({ pubName, revenue: amount });
             }
         }
+
+        leaderBoard.sort((l1, l2) => l2.revenue - l1.revenue);
+
+        const leaderboardElement = document.getElementById("leaderboard");
+        leaderboardElement.innerHTML = "";
+
+        leaderBoard.forEach(l => {
+            const li = document.createElement("li");
+            li.innerText = `${l.pubName} - ${l.revenue}`
+            leaderboardElement.appendChild(li);
+        });
     }
 
     sendInit = () => {
