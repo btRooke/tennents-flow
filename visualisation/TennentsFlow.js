@@ -116,15 +116,13 @@ export default class TennentsFlow {
 
     }
 
-    addPub(pubName, x, z) {
+    addPub(pubName, x, z, size="medium") {
 
         this.pubs[pubName] = [x, z];
 
         // adding the pub model
 
-        const keys = Object.keys(this.models);
-        const key = keys[Math.floor(keys.length * Math.random())];
-        const newPub = this.models[key].clone();
+        const newPub = this.models[size].clone();
         newPub.position.setX(x);
         newPub.position.setZ(z);
         newPub.rotateY(Math.random() * 2 * Math.PI);
@@ -310,7 +308,7 @@ export default class TennentsFlow {
             const loader = new GLTFLoader();
 
             const pubs = [
-                { file: "assets/cartoon_pub.glb", key: "default", scale: 0.85 },
+                { file: "assets/cartoon_pub.glb", key: "medium", scale: 0.85 },
                 { file: "assets/small_pub.glb", key: "small", scale: 0.4 },
                 { file: "assets/new_large_pub.glb", key: "large", scale: 0.7 },
             ];
