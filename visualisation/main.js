@@ -18,7 +18,6 @@ if ( WebGL.isWebGLAvailable() ) {
 
     socket = new TennentsFlowSocket(flow);
 
-    document.getElementById("nextStepButton").onclick = e => socket.sendNextStep();
     setTimeout(() => {
         flow.moveActors("Toastie Bar", "Greyfriars Inn", 5);
         inc();
