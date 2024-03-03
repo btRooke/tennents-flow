@@ -2,6 +2,7 @@
     {
         "name": "Aikmans Cellar Bar",
         "classification": "Medium",
+        "size": "medium",
         "average_stay": 120,
         "popularity": 6,
         "location": {
@@ -16,6 +17,7 @@
     {
         "name": "The Central",
         "classification": "Medium",
+        "size": "medium",
         "average_stay": 65,
         "popularity": 5,
         "location": {
@@ -43,7 +45,8 @@
     },
     {
         "name": "Greyfriars Inn",
-        "classification": "Large Pub",
+        "classification": "Large",
+        "size": "small",
         "average_stay": 40,
         "popularity": 2,
         "location": {
@@ -71,7 +74,7 @@
     },
     {
         "name": "Molly Malones",
-        "classification": "Large Pub",
+        "classification": "Large",
         "average_stay": 90,
         "popularity": 8,
         "location": {
@@ -127,7 +130,7 @@
     },
     {
         "name": "The Vic",
-        "classification": "Large Pub",
+        "classification": "Large",
         "average_stay": 120,
         "popularity": 6,
         "location": {
@@ -141,7 +144,7 @@
     },
     {
         "name": "Whey Pat Tavern",
-        "classification": "Medium Pub",
+        "classification": "Medium",
         "average_stay": 120,
         "popularity": 7,
         "location": {

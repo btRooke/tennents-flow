@@ -1,5 +1,6 @@
     import * as THREE from "three";
 import { FlyControls } from "three/addons/controls/FlyControls.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { FontLoader } from "three/addons/loaders/FontLoader.js";
 import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
@@ -239,10 +240,14 @@ export default class TennentsFlow {
             1000 // far clip
         );
 
+        // this.flyControls = new OrbitControls(this.camera, this.renderer.domElement);
+        // this.flyControls.autoRotate = true;
+        // this.camera.position.set(0, 1, 5);
+
         this.flyControls = new FlyControls(this.camera, document.body);
         this.flyControls.dragToLook = true;
-        this.flyControls.rollSpeed = 0.5;
-        this.flyControls.movementSpeed = 2;
+        this.flyControls.rollSpeed = 0.8;
+        this.flyControls.movementSpeed = 5;
 
         this.camera.position.x = 0.5;
         this.camera.position.y = 0.5;
@@ -257,7 +262,7 @@ export default class TennentsFlow {
             const loader = new THREE.TextureLoader();
 
             const textures = [
-                { file: "assets/rocks_ground_03_diff_4k.jpg", key: "diff" },
+                { file: "assets/grass.jpg", key: "diff" },
                 { file: "assets/rocks_ground_03_disp_4k.png", key: "disp" }
             ];
 
@@ -268,7 +273,7 @@ export default class TennentsFlow {
                     loader.load(
                         t.file,
                         (text) => {
-                            text.repeat.set(250, 250);
+                            text.repeat.set(1000, 1000);
                             text.wrapS = THREE.RepeatWrapping;
                             text.wrapT = THREE.RepeatWrapping;
                             res(text);
@@ -321,17 +326,6 @@ export default class TennentsFlow {
                             // no idea why I had to write my own function here
                             pub.scale.setScalar((1 / largest(Object.values(boundingBox.max))*p.scale)); // normalise to 1 unit
                             pub.position.set(0, -1.01, 0);
-
-                            let meshes = []
-
-                            pub.traverse(c => {
-
-                                if (c.isMesh) {
-                                    meshes.push(c);
-                                }
-
-                            });
-
                             res(pub);
                         },
                         (xhr) => {
@@ -426,8 +420,8 @@ export default class TennentsFlow {
     }
 
     displayRevenue(pubName, amount) {
-        const aString = ` Count: ${Number(amount)}`;
-        this.signs[pubName].geometry = new TextGeometry(formatStringIndent(pubName + aString, 12), this.fonts.default).center();
+        const aString = ` Income: £${Number(amount)}`;
+        this.signs[pubName].geometry = new TextGeometry(formatStringIndent(pubName + aString, 13), this.fonts.default).center();
     }
 
     moveActors(srcPub, destPub, numberActors) {

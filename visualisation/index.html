@@ -23,15 +23,35 @@
                 height: 100%;
             }
 
-            .flexinner button {
-                padding: 5px;
+            button {
+                padding: 8px;
+                border: 2px solid black;
+                border-radius: 5px;
+                background-color: rgba(0, 0, 0, 0.5);
+                color: white;
+            }
+
+            button:hover {
+                cursor: pointer;
+                background-color: rgba(0, 0, 0, 0.8);
+            }
+
+            .bottomleftside ol {
+                margin: 0 0 0 2em;
+                padding: 0;
+                color: white;
+                opacity: 1;
             }
 
             .bottomleftside span {
-                border: 1px solid black;
+                border: 2px solid black;
+                border-radius: 5px;
                 display: block;
-                height: 150px;
-                width: 350px;
+                height: 200px;
+                width: 400px;
+                display: flex;
+                padding: 2em;
+                background-color: rgba(0, 0, 0, 0.5);
             }
 
             .bottomleftside {
@@ -49,9 +69,22 @@
                 gap: 10px
             }
 
+            .buttonList {
+                display: flex;
+                gap: 10px;
+            }
+
             * {
                 font-family: 'Courier New', Courier, monospace;
                 font-weight: bold;
+            }
+
+            .bb {
+                padding: 8px;
+                border: 2px solid black;
+                border-radius: 5px;
+                background-color: rgba(0, 0, 0, 0.5);
+                color: white;
             }
 
         </style>
@@ -60,14 +93,15 @@
     <body>
         <div id="tfdiv">
             <div class="topleftside">
-                <div>
+                <div class="buttonList">
                     <button id="slowDown">&lt;&lt;</button><button id="playPause">Go/Stop</button><button id="speedUp">>></button>
                 </div>
-                <span class="frameCount">Tick rate: 4/s</span>
-                <span class="frameCount">Tick count: 123</span>
+                <span id="tickCount"  class="bb frameCount" onclick="">Tick count: XXX</span>
+                <span id="tickRate" class="bb frameCount">Tick count: 123</span>
+                <span id="time" class="bb frameCount">Time:</span>
             </div>
             <div class="bottomleftside">
-                <span></span>   
+                <span><ol id="leaderboard"></ol></span>
             </div>
         </div>
         <script type="module" src="TennentsFlow.js"></script>

@@ -43,6 +43,7 @@ def convert_pubsim(json_file) -> list[map_types.Pub]:
     for pub in pubs:
         b = map_types.Pub()
         b.name = pub["name"]
+        b.size = pub["classification"].lower()
         b.location = (pub['location']['lat'], pub['location']['lng'])
         ret.append(b)
 
