@@ -122,8 +122,14 @@ export default class TennentsFlow {
         const clip = new THREE.AnimationClip(
             "pubNameBob",
             -1, // -1 means auto
-            [bobTrack, rotationTrack]
+            [bobTrack]
         );
+
+        const spinClip = new THREE.AnimationClip(
+            "pubNameSpin",
+            -1,
+            [rotationTrack]
+        )
 
         const name = {
             geometry: new TextGeometry(formatStringIndent(pubName, 10), this.fonts.default).center(),
@@ -135,9 +141,9 @@ export default class TennentsFlow {
         const mixer = new THREE.AnimationMixer(nameMesh);
 
         this.mixers.push(mixer);
-        const action = mixer.clipAction(clip);
-        action.setEffectiveTimeScale(0.5);
-        action.play();
+
+        mixer.clipAction(clip).play();
+        mixer.clipAction(spinClip).play();
 
         nameMesh.position.setX(x);
         nameMesh.position.setZ(z);
