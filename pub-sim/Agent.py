@@ -6,7 +6,7 @@ Agent.py
 global time
 import numpy as np
 import random
-from utils import utils
+from pubsim.utils import utils
 
 class Agent:
     def __init__(self, id, venues, start_venue_distribution_path, seed):

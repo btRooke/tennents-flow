@@ -444,24 +444,24 @@ export default class TennentsFlow {
                 geometry: new THREE.SphereGeometry(0.06, 3, 3).center(),
                 material: new THREE.MeshPhysicalMaterial({ color: 0x0000FF, transparent: true, opacity: 0.5 })
             };
-    
+
             const height = -1 + 0.18;
-    
+
             const ballMesh = new THREE.Mesh(sphere.geometry, sphere.material);
-    
+
             const pubSwap = new THREE.VectorKeyframeTrack(
                 ".position", [0, 2 + smallRandom() * 2], [
                     this.pubs[srcPub][0] + smallRandom(), height, this.pubs[srcPub][1] + smallRandom(),
                     this.pubs[destPub][0] + smallRandom(), height, this.pubs[destPub][1] + smallRandom()
                 ]
             );
-    
+
             const clip = new THREE.AnimationClip(
                 "actorSwap",
                 -1, // -1 means auto
                 [pubSwap]
             );
-    
+
             const mixer = new THREE.AnimationMixer(ballMesh);
             this.mixers.push(mixer);
             const action = mixer.clipAction(clip);
@@ -475,7 +475,7 @@ export default class TennentsFlow {
                 mixer.uncacheAction(action);
                 this.scene.remove(ballMesh);
             });
-    
+
 
         }
 
