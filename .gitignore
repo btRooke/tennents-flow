@@ -4,3 +4,4 @@ env
 .env
 node_modules
 __pycache__
+.vite

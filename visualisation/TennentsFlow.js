@@ -235,8 +235,20 @@ export default class TennentsFlow {
                             const pub = gltf.scene;
                             const boundingBox = new THREE.Box3().setFromObject(pub);
                             pub.scale.setScalar(1/Object.values(boundingBox.max).sort().reverse()[0]); // normalise to 1 unit
-                            console.trace(pub);
                             pub.position.set(0, -1.01, 0);
+
+                            let meshes = []
+
+                            pub.traverse(c => {
+
+                                if (c.isMesh) {
+                                    meshes.push(c);
+                                }
+
+                            });
+
+                            console.log(meshes)
+
                             res(pub);
                         },
                         (xhr) => {
@@ -270,10 +282,10 @@ export default class TennentsFlow {
         const light = new THREE.AmbientLight( 0xFFFFFF ); // soft white light
         this.scene.add(light);
 
-        const pointLight = new THREE.PointLight(0xFF0000, 500, 0, 2);
-        pointLight.castShadow = true;
-        pointLight.position.set(5, 1, 1);
-        this.scene.add(pointLight);
+        // const pointLight = new THREE.PointLight(0xFF0000, 500, 0, 2);
+        // pointLight.castShadow = true;
+        // pointLight.position.set(5, 1, 1);
+        // this.scene.add(pointLight);
 
     }
 
