@@ -10,9 +10,9 @@ class GoogleMapsQuery():
     def _construct_pub(self, g_bar) -> map_types.Pub:
         the_pub = map_types.Pub()
 
-        long_lat_dict = g_bar['geometry']['location']
-        the_pub.coordinates = [long_lat_dict['lat'], long_lat_dict['lng']]
-        the_pub.name = g_bar['name']
+        long_lat_dict = the_pub['geometry']['location']
+        the_pub.coordinates = [long_lat_dict['lat'], long_lat_dict['lang']]
+        the_pub.name = the_pub['name']
         the_pub.average_stay = 0
         the_pub.average_wait = 0
         the_pub.capacity = 0
