@@ -25,7 +25,7 @@ class SimSocket():
         self.uuids = {}
 
     def generate_world(self):
-        pubs = maps.convert_pubsim('./pubsim/example/StA_venue_data.json')
+        pubs = maps.convert_pubsim('./pubsim/example/StA_spoons_venue_data.json')
         return pubs
 
     async def handle_init(self, websocket: Any):
@@ -35,8 +35,8 @@ class SimSocket():
 
         session_id = str(uuid4())
 
-        self.uuids[session_id] = PubMap(num_agents=1000, venue_path="./pubsim/example/StA_venue_data.json",
-                    venue_distribution_path="./pubsim/example/StA_venue_distribution.json",
+        self.uuids[session_id] = PubMap(num_agents=1000, venue_path="./pubsim/example/StA_spoons_venue_data.json",
+                    venue_distribution_path="./pubsim/example/StA_spoons_venue_distribution.json",
                     seed=144)
 
         response = {
