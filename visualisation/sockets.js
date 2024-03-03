@@ -26,13 +26,14 @@ export default class TennentsFlowSocket {
     }
 
     handleInit = (initEvent) => {
+        this.id = initEvent.uuid;
+
         for (const pub of initEvent.pubs) {
             const lat = pub.location[0];
         const long = pub.location[1];
             console.log(pub);
             this.tennentsFlow.addPub(pub.name, lat, long, pub.size);
         }
-        this.id = initEvent.uuid;
     }
 
     handleNextStep = nextStepEvent => {
