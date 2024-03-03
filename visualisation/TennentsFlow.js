@@ -62,6 +62,7 @@ export default class TennentsFlow {
         this.pubs = [];
         this.signs = [];
         this.mixers = [];
+        this.start = 0;
 
         this.#addClock();
         this.#addScene();
@@ -355,13 +356,14 @@ export default class TennentsFlow {
 
     #addLighting() {
         // ==== Lighting ====
-        const light = new THREE.AmbientLight( 0xFFFFFF ); // soft white light
+        const val = 150;
+        const light = new THREE.AmbientLight(0xFFFFFF); // soft white light
         this.scene.add(light);
 
-        // const pointLight = new THREE.PointLight(0xFF0000, 500, 0, 2);
-        // pointLight.castShadow = true;
-        // pointLight.position.set(5, 1, 1);
-        // this.scene.add(pointLight);
+        this.pointLight = new THREE.DirectionalLight(0xFFCCCC, 10);
+        console.log(this.pointLight);
+        this.pointLight.position.set(-5, 1.5, 1);
+        this.scene.add(this.pointLight);
 
     }
 
@@ -431,7 +433,7 @@ export default class TennentsFlow {
 
             const sphere = {
                 geometry: new THREE.SphereGeometry(0.06, 3, 3).center(),
-                material: new THREE.MeshPhysicalMaterial({ color: 0x0000FF, transparent: true, opacity: 0.5 })
+                material: new THREE.MeshPhysicalMaterial({ color: 0x0000FF, transparent: true, opacity: 0.8 })
             };
 
             const height = -1 + 0.18;
