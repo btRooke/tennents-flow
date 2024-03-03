@@ -16,6 +16,9 @@ export default class TennentsFlowSocket {
                 case "init":
                     this.handleInit(event);
                     break;
+                case "next_step":
+                    this.handleNextStep(event);
+                    break;
             }
         });
         this.ws.onopen = () => this.sendInit();
@@ -25,9 +28,12 @@ export default class TennentsFlowSocket {
         for (const pub of initEvent.pubs) {
             const lat = pub.coordinates[0];
             const long = pub.coordinates[1];
-            console.log(pub);
             this.tennentsFlow.addPub(pub.name, lat, long);
         }
+    }
+
+    handleNextStep = nextStepEvent => {
+        console.log(nextStepEvent);
     }
 
     sendInit = () => {
@@ -36,5 +42,13 @@ export default class TennentsFlowSocket {
         };
 
         this.ws.send(JSON.stringify(initEvent));
+    }
+
+    sendNextStep = () => {
+        const nextStepEvent = {
+            type: "next_step",
+        }
+
+        this.ws.send(JSON.stringify(nextStepEvent));
     }
 }

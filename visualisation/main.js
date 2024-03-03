@@ -1,17 +1,18 @@
 import WebGL from 'three/addons/capabilities/WebGL.js';
-import TennentsFlow, { formatStringIndent } from "./TennentsFlow.js";
+import TennentsFlow from "./TennentsFlow.js";
 import TennentsFlowSocket from './sockets.js';
 
 // ==== Startup ====
+let socket;
 
 if ( WebGL.isWebGLAvailable() ) {
 	const flow = new TennentsFlow();
     await flow.loadModels();
 
-    const sockets = new TennentsFlowSocket(flow);
-}
+    socket = new TennentsFlowSocket(flow);
 
-else {
+    document.getElementById("nextStepButton").onclick = e => socket.sendNextStep();
+} else {
 	const warning = WebGL.getWebGLErrorMessage();
     alert("WebGL not working innit.")
 }
