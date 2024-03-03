@@ -159,8 +159,8 @@
         "average_stay": 60,
         "popularity": 10,
         "location": {
-            "lat": 56.3285976,
-            "lng": -2.8112512
+            "lat": 56.3395976,
+            "lng": -2.8052512
         },
         "capacity": 200,
         "drink_cost": 2.0,
