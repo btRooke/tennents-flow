@@ -17,7 +17,6 @@
             }
 
             .leftside {
-                position: absolute;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
@@ -28,19 +27,28 @@
                 padding: 5px;
             }
 
-            .flexinner textarea {
+            .bottomleftside span {
+                border: 1px solid black;
+                display: block;
                 height: 150px;
-                resize: none;
+                width: 350px;
             }
 
-            .flexinner {
+            .bottomleftside {
+                position: absolute;
+                left: 10px;
+                bottom: 10px;
+            }
+
+            .topleftside {
+                position: absolute;
                 margin: 1em;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 gap: 10px
             }
-
+            
             * {
                 font-family: 'Courier New', Courier, monospace;
                 font-weight: bold;
@@ -51,16 +59,14 @@
 
     <body>
         <div id="tfdiv">
-            <div class="leftside">
-                <div class="flexinner topleftside">
-                    <div>
-                        <button id="slowDown">&lt;&lt;</button><button id="playPause">Go/Stop</button><button id="speedUp">>></button>
-                    </div>
-                    <span class="frameCount">Frame count: 123</span>
+            <div class="topleftside">
+                <div>
+                    <button id="slowDown">&lt;&lt;</button><button id="playPause">Go/Stop</button><button id="speedUp">>></button>
                 </div>
-                <div class="flexinner bottomleftside">
-                    <textarea></textarea>   
-                </div>
+                <span class="frameCount">Frame count: 123</span>
+            </div>
+            <div class="bottomleftside">
+                <span></span>   
             </div>
         </div>
         <script type="module" src="TennentsFlow.js"></script>
