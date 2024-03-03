@@ -67,7 +67,7 @@ export default class TennentsFlow {
         this.#addScene();
         this.#addRenderer();
         this.#addCamera();
-        this.#addAxes();
+        // this.#addAxes();
         this.#addLighting();
         this.#animate();
     }
