@@ -8,6 +8,7 @@ from frontend import conv
 from frontend import pub_sim
 from pubsim.PubMap import PubMap
 from uuid import uuid4
+import os
 
 INIT_EVENT = "init"
 NEXT_STEP = "next_step"
@@ -24,9 +25,19 @@ class SimSocket():
         self.pubs = []
         self.uuids = {}
 
+    def _get_data_source(self) -> tuple[str, str]:
+        source = ""
+
+        if 'SOURCE' in os.environ:
+            source = os.environ['SOURCE']
+
+        if source == 'SPOONS':
+            return "./pubsim/spoons_example/StA_spoons_venue_data.json", "./pubsim/spoons_example/StA_spoons_venue_distribution.json"
+
+        return ("./pubsim/example/StA_venue_data.json", "./pubsim/example/StA_venue_distribution.json")
+
     def generate_world(self):
-        pubs = maps.convert_pubsim('./pubsim/example/StA_spoons_venue_data.json')
-        return pubs
+        return maps.convert_pubsim(self._get_data_source()[0])
 
     async def handle_init(self, websocket: Any):
         pubs = self.generate_world()
@@ -35,8 +46,12 @@ class SimSocket():
 
         session_id = str(uuid4())
 
-        self.uuids[session_id] = PubMap(num_agents=1000, venue_path="./pubsim/example/StA_spoons_venue_data.json",
-                    venue_distribution_path="./pubsim/example/StA_spoons_venue_distribution.json",
+        venue_data, distribution = self._get_data_source()
+
+        print(venue_data, distribution)
+
+        self.uuids[session_id] = PubMap(num_agents=1000, venue_path=venue_data,
+                    venue_distribution_path=distribution,
                     seed=144)
 
         response = {
@@ -49,9 +64,9 @@ class SimSocket():
 
     async def handle_next_step(self, websocket: Any, event: Any):
         uid = event["uuid"]
-        print(self.uuids)
         pub_map = self.uuids[uid]
         transitions, revenues = pub_map.step()
+
 
         next_step_event = {
             "type": NEXT_STEP,

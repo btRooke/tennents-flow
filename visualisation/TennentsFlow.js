@@ -312,6 +312,7 @@ export default class TennentsFlow {
                 { file: "assets/cartoon_pub.glb", key: "medium", scale: 0.85 },
                 { file: "assets/small_pub.glb", key: "small", scale: 0.4 },
                 { file: "assets/new_large_pub.glb", key: "large", scale: 0.7 },
+                { file: "assets/witch_castle_gate_entrence.glb", key: "spoons", scale: 1 }
             ];
 
             let loadingPromises = pubs.map(p => {
