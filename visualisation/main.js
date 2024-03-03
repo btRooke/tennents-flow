@@ -16,8 +16,6 @@ if ( WebGL.isWebGLAvailable() ) {
     flow = new TennentsFlow();
     await flow.loadModels();
     socket = new TennentsFlowSocket(flow);
-    document.getElementById("nextStepButton").onclick = e => socket.sendNextStep();
-
     setInterval(() => socket.sendNextStep(), 2200);
 }
 
