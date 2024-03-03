@@ -115,8 +115,19 @@ export default class TennentsFlow {
             ].flat()
         );
 
+        const name = {
+            geometry: new TextGeometry(formatStringIndent(pubName, 10), this.fonts.default).center(),
+            material: new THREE.MeshBasicMaterial({ color: 0x0E0E0E })
+        }
+
+        const nameMesh = new THREE.Mesh(name.geometry, name.material);
+
+        const box = new THREE.Box3();
+        box.setFromObject(nameMesh);
+        const height = box.max.y
+
         const bobTrack = new THREE.VectorKeyframeTrack(
-            ".position", [0, 1, 2], [x, 0, z, x, 0.3, z, x, 0, z]
+            ".position", [0, 1, 2], [x, height, z, x, 0.3 + height, z, x,  height, z]
         );
 
         const clip = new THREE.AnimationClip(
@@ -131,12 +142,6 @@ export default class TennentsFlow {
             [rotationTrack]
         )
 
-        const name = {
-            geometry: new TextGeometry(formatStringIndent(pubName, 10), this.fonts.default).center(),
-            material: new THREE.MeshBasicMaterial({ color: 0x0E0E0E })
-        }
-
-        const nameMesh = new THREE.Mesh(name.geometry, name.material);
 
         const mixer = new THREE.AnimationMixer(nameMesh);
 
