@@ -4,6 +4,7 @@ const PORT = 8001;
 export default class TennentsFlowSocket {
     constructor(tennentsFlow) {
         this.tennentsFlow = tennentsFlow;
+        this.id = null;
         this.initWS();
     }
 
@@ -30,19 +31,13 @@ export default class TennentsFlowSocket {
             const long = pub.location[1];
             this.tennentsFlow.addPub(pub.name, lat, long);
         }
+        this.id = initEvent.uuid;
     }
 
     handleNextStep = nextStepEvent => {
         for (const [pub1, moves] of Object.entries(nextStepEvent.data.agents)) {
-
-            console.log(pub1);
-            console.log(nextStepEvent.data.agents);
-
             for (const [pub2, numPeople] of Object.entries(moves)) {
                 this.tennentsFlow.moveActors(pub1, pub2, numPeople);
-                console.log(pub1);
-                console.log(pub2);
-                console.log(numPeople);
             }
         }
     }
@@ -58,6 +53,7 @@ export default class TennentsFlowSocket {
     sendNextStep = () => {
         const nextStepEvent = {
             type: "next_step",
+            uuid: this.id
         }
 
         this.ws.send(JSON.stringify(nextStepEvent));
