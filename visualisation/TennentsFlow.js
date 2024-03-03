@@ -57,6 +57,7 @@ export default class TennentsFlow {
 
     constructor() {
 
+        this.pubs = [];
         this.signs = [];
         this.mixers = [];
 
@@ -64,7 +65,6 @@ export default class TennentsFlow {
         this.#addScene();
         this.#addRenderer();
         this.#addCamera();
-        this.#addLand();
         // this.#addAxes();
         this.#addLighting();
         this.#animate();
@@ -72,7 +72,9 @@ export default class TennentsFlow {
 
     async loadModels() {
         this.models = await this.#loadPubModels();
+        this.textures = await this.#loadTextures();
         this.fonts = await this.#loadFonts();
+        this.#addLand();
     }
 
     #loadFonts() {
@@ -90,14 +92,14 @@ export default class TennentsFlow {
                     res({
                         default: {
                             font: font,
-                            size: 0.2,
-                            height: 0.04,
-                            curveSegments: 12,
+                            size: 0.12,
+                            height: 0.03,
+                            curveSegments: 1,
                             bevelEnabled: true,
                             bevelThickness: 0,
                             bevelSize: 0,
                             bevelOffset: 0,
-                            bevelSegments: 5
+                            bevelSegments: 1
                         }
                     });
 
@@ -112,6 +114,8 @@ export default class TennentsFlow {
 
     addPub(pubName, x, z) {
 
+        this.pubs[pubName] = [x, z];
+
         // adding the pub model
 
         const keys = Object.keys(this.models);
@@ -122,13 +126,19 @@ export default class TennentsFlow {
         newPub.rotateY(Math.random() * 2 * Math.PI);
         this.scene.add(newPub);
 
+        const pubBox = new THREE.Box3();
+        pubBox.setFromObject(newPub);
+        const pubHeight = pubBox.max.y - pubBox.min.y;
+
         // adding its name
+
+        const randomOffset = Math.PI * 2 * Math.random();
 
         const rotationTrack = new THREE.QuaternionKeyframeTrack(
             ".quaternion", [0, 5, 10], [
-                quaternionFromYAngle(0).toArray(),
-                quaternionFromYAngle(Math.PI).toArray(),
-                quaternionFromYAngle(Math.PI*2).toArray()
+                quaternionFromYAngle(randomOffset + 0).toArray(),
+                quaternionFromYAngle(Math.PI + randomOffset).toArray(),
+                quaternionFromYAngle(Math.PI*2 + randomOffset).toArray()
             ].flat()
         );
 
@@ -139,12 +149,14 @@ export default class TennentsFlow {
 
         const nameMesh = new THREE.Mesh(name.geometry, name.material);
 
+        this.signs[pubName] = nameMesh;
+
         const box = new THREE.Box3();
         box.setFromObject(nameMesh);
         const height = box.max.y
 
         const bobTrack = new THREE.VectorKeyframeTrack(
-            ".position", [0, 1, 2], [x, height, z, x, 0.3 + height, z, x,  height, z]
+            ".position", [0, 1, 2], [x, pubHeight + height - 1, z, x, pubHeight + height - 1 + 0.18, z, x, pubHeight + height - 1, z]
         );
 
         const clip = new THREE.AnimationClip(
@@ -170,7 +182,6 @@ export default class TennentsFlow {
         nameMesh.position.setX(x);
         nameMesh.position.setZ(z);
 
-        this.signs.push(nameMesh);
         this.scene.add(nameMesh);
     }
 
@@ -241,6 +252,53 @@ export default class TennentsFlow {
         this.camera.lookAt(0, 0, 0);
     }
 
+    #loadTextures() {
+
+        return new Promise(async (res, rej) => {
+
+            const loader = new THREE.TextureLoader();
+
+            const textures = [
+                { file: "assets/rocks_ground_03_diff_4k.jpg", key: "diff" },
+                { file: "assets/rocks_ground_03_disp_4k.png", key: "disp" }
+            ];
+
+            let loadingPromises = textures.map(t => {
+
+                return new Promise(res => {
+
+                    loader.load(
+                        t.file,
+                        (text) => {
+                            text.repeat.set(250, 250);
+                            text.wrapS = THREE.RepeatWrapping;
+                            text.wrapT = THREE.RepeatWrapping;
+                            res(text);
+                        },
+                        (xhr) => {
+                            console.log(`${t.file} ${(xhr.loaded/xhr.total*100)}% loaded`);
+                        },
+                        (error) => {
+                            console.error(error);
+                        }
+                    );
+
+                });
+
+            });
+
+            let loadedTextures = {};
+
+            for (let index in textures) {
+                loadedTextures[textures[index].key] = await loadingPromises[index];
+            }
+
+            res(loadedTextures);
+
+        });
+
+    }
+
      #loadPubModels() {
 
         return new Promise(async (res, rej) => {
@@ -250,7 +308,7 @@ export default class TennentsFlow {
             const pubs = [
                 { file: "assets/cartoon_pub.glb", key: "default", scale: 0.85 },
                 { file: "assets/small_pub.glb", key: "small", scale: 0.4 },
-                { file: "assets/large_pub.glb", key: "large", scale: 0.7 },
+                { file: "assets/new_large_pub.glb", key: "large", scale: 0.7 },
             ];
 
             let loadingPromises = pubs.map(p => {
@@ -275,8 +333,6 @@ export default class TennentsFlow {
                                 }
 
                             });
-
-                            console.log(meshes)
 
                             res(pub);
                         },
@@ -326,7 +382,7 @@ export default class TennentsFlow {
                         .rotateX(Math.PI/2)
                         .translate(0, -1, 0),
 
-            material: new THREE.MeshLambertMaterial({ color: 0x03B003, side: THREE.DoubleSide })
+            material: new THREE.MeshStandardMaterial({ map: this.textures.diff, side: THREE.DoubleSide })
         }
 
         this.scene.add(new THREE.Mesh(plane.geometry, plane.material));
@@ -372,10 +428,38 @@ export default class TennentsFlow {
     }
 
     displayRevenue(pubName, amount) {
-        // TODO:
+        const aString = ` Count: ${Number(amount)}`;
+        this.signs[pubName].geometry = new TextGeometry(formatStringIndent(pubName + aString, 12), this.fonts.default).center();
     }
 
     moveActors(srcPub, destPub, numberActors) {
+
+        const sphere = {
+            geometry: new THREE.SphereGeometry(0.06, 4, 4).center(),
+            material: new THREE.MeshPhysicalMaterial({ color: 0x0000FF, transparent: true, opacity: 0.5 })
+        };
+
+        const height = -1 + 0.18;
+
+        const ballMesh = new THREE.Mesh(sphere.geometry, sphere.material);
+
+        console.log(this.pubs);
+
+        const pubSwap = new THREE.VectorKeyframeTrack(
+            ".position", [0, 2], [this.pubs[srcPub][0], height, this.pubs[srcPub][1], this.pubs[destPub][0], height, this.pubs[destPub][1]]
+        );
+
+        const clip = new THREE.AnimationClip(
+            "actorSwap",
+            -1, // -1 means auto
+            [pubSwap]
+        );
+
+        const mixer = new THREE.AnimationMixer(ballMesh);
+        this.mixers.push(mixer);
+        mixer.clipAction(clip).play();
+        this.scene.add(ballMesh);
+
     }
 
 }
