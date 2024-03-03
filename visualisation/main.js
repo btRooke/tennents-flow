@@ -7,33 +7,43 @@ let socket;
 let flow;
 let i = 1;
 
-function inc() {
-    flow.displayRevenue("Vic St Andrews", i++);
-    setTimeout(() => inc(), 1000);
-}
-
 let tickPeriod = 0;
+let paused = false;
+let tickCount = 0;
 
 function setTickPeriod(period) {
     tickPeriod = period;
     document.querySelector("#tickRate").innerText = `Tick Rate: ${tickPeriod}`
 }
 
-if ( WebGL.isWebGLAvailable() ) {
+function addMinutes(date, minutes) {
+    return new Date(date.getTime() + minutes*60000);
+}
 
+if ( WebGL.isWebGLAvailable() ) {
     setTickPeriod(2200);
     flow = new TennentsFlow();
     await flow.loadModels();
     socket = new TennentsFlowSocket(flow);
+
     let trigger = () => {
+        if (paused) {
+            return;
+        }
+
+        document.querySelector('#tickCount').innerText = `Tick Count: ${++tickCount}`;
         socket.sendNextStep();
+
+        const date = new Date();
+        date.setHours(18, 0, 0, 0);
+
+        document.querySelector('#time').innerText = `Time: ${addMinutes(date, tickCount).toLocaleTimeString()}`;
         setTimeout(trigger, tickPeriod);
     }
 
     setTimeout(trigger, tickPeriod);
 
     // buttons
-
     document.querySelector("#slowDown").addEventListener("click", () => {
         setTickPeriod(tickPeriod + 500);
     });
@@ -44,9 +54,9 @@ if ( WebGL.isWebGLAvailable() ) {
     });
 
     document.querySelector("#playPause").addEventListener("click", () => {
-
+        paused = !paused;
+        trigger();
     });
-
 }
 
 else {
