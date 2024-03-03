@@ -11,6 +11,7 @@ def convert_to_frontend(backend_pub: map_types.Pub) -> frontend_types.Pub:
     pub = frontend_types.Pub()
     pub.location = backend_pub.location
     pub.name = backend_pub.name
+    pub.size = backend_pub.size
     return pub
 
 def convert_pubs(pubs: list[map_types.Pub]) -> list[frontend_types.Pub]:

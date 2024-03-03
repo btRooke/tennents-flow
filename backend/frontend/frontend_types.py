@@ -5,3 +5,4 @@ and the frontend passed by websockets
 class Pub():
     coordinates: tuple[float, float]
     name: str
+    size: str

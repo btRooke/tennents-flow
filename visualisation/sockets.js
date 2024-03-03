@@ -28,8 +28,9 @@ export default class TennentsFlowSocket {
     handleInit = (initEvent) => {
         for (const pub of initEvent.pubs) {
             const lat = pub.location[0];
-            const long = pub.location[1];
-            this.tennentsFlow.addPub(pub.name, lat, long);
+        const long = pub.location[1];
+            console.log(pub);
+            this.tennentsFlow.addPub(pub.name, lat, long, pub.size);
         }
         this.id = initEvent.uuid;
     }
