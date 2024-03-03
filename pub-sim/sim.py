@@ -31,8 +31,8 @@ def sim_cmd():
     # PARSE FOR ALL ARGUMENTS AT COMMAND LINE
     arg_parser = ArgumentParser()
     arg_parser.add_argument("-n", "--num_agents", type=int, default=1000, help="Number of Agents")
-    arg_parser.add_argument("-v", "--venue_path", type = str, default = "example\StA_venue_data.json", help="Path to venues file")
-    arg_parser.add_argument("-d", "--distribution_path", type = str, default="example\StA_venue_distribution.json", help="Path to start venue probability distribution")
+    arg_parser.add_argument("-v", "--venue_path", type = str, default = "example/StA_venue_data.json", help="Path to venues file")
+    arg_parser.add_argument("-d", "--distribution_path", type = str, default="example/StA_venue_distribution.json", help="Path to start venue probability distribution")
     arg_parser.add_argument("-s", "--seed", type=int, default= 144, help="Random generation seed")
 
     try:
