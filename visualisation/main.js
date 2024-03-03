@@ -20,10 +20,9 @@ if ( WebGL.isWebGLAvailable() ) {
 
     document.getElementById("nextStepButton").onclick = e => socket.sendNextStep();
     setTimeout(() => {
-        flow.moveActors("Vic St Andrews", "The Rule", 5);
+        flow.moveActors("Toastie Bar", "Greyfriars Inn", 5);
         inc();
-    }
-        , 10000);
+    }, 10000);
 
 }
 

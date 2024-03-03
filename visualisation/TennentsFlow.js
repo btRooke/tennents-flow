@@ -23,6 +23,10 @@ function largest(elements) {
 
 }
 
+function smallRandom() {
+    return Math.random() * 0.3 - 0.15;
+}
+
 export function formatStringIndent(inputString, maxCharacters) {
     const words = inputString.split(' ');
 
@@ -434,31 +438,46 @@ export default class TennentsFlow {
 
     moveActors(srcPub, destPub, numberActors) {
 
-        const sphere = {
-            geometry: new THREE.SphereGeometry(0.06, 4, 4).center(),
-            material: new THREE.MeshPhysicalMaterial({ color: 0x0000FF, transparent: true, opacity: 0.5 })
-        };
+        for (let i = 0; i < numberActors; i++) {
 
-        const height = -1 + 0.18;
+            const sphere = {
+                geometry: new THREE.SphereGeometry(0.06, 3, 3).center(),
+                material: new THREE.MeshPhysicalMaterial({ color: 0x0000FF, transparent: true, opacity: 0.5 })
+            };
+    
+            const height = -1 + 0.18;
+    
+            const ballMesh = new THREE.Mesh(sphere.geometry, sphere.material);
+    
+            const pubSwap = new THREE.VectorKeyframeTrack(
+                ".position", [0, 2 + smallRandom() * 2], [
+                    this.pubs[srcPub][0] + smallRandom(), height, this.pubs[srcPub][1] + smallRandom(),
+                    this.pubs[destPub][0] + smallRandom(), height, this.pubs[destPub][1] + smallRandom()
+                ]
+            );
+    
+            const clip = new THREE.AnimationClip(
+                "actorSwap",
+                -1, // -1 means auto
+                [pubSwap]
+            );
+    
+            const mixer = new THREE.AnimationMixer(ballMesh);
+            this.mixers.push(mixer);
+            const action = mixer.clipAction(clip);
+            action.loop = THREE.LoopOnce;
+            action.play();
+            this.scene.add(ballMesh);
+            mixer.addEventListener( 'finished', (e) => {
+                action.stop();
+                mixer.uncacheRoot(ballMesh);
+                mixer.uncacheClip(clip);
+                mixer.uncacheAction(action);
+                this.scene.remove(ballMesh);
+            });
+    
 
-        const ballMesh = new THREE.Mesh(sphere.geometry, sphere.material);
-
-        console.log(this.pubs);
-
-        const pubSwap = new THREE.VectorKeyframeTrack(
-            ".position", [0, 2], [this.pubs[srcPub][0], height, this.pubs[srcPub][1], this.pubs[destPub][0], height, this.pubs[destPub][1]]
-        );
-
-        const clip = new THREE.AnimationClip(
-            "actorSwap",
-            -1, // -1 means auto
-            [pubSwap]
-        );
-
-        const mixer = new THREE.AnimationMixer(ballMesh);
-        this.mixers.push(mixer);
-        mixer.clipAction(clip).play();
-        this.scene.add(ballMesh);
+        }
 
     }
 
