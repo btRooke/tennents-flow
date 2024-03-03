@@ -8,7 +8,7 @@ import sys
 import datetime
 
 # Program class imports
-import PubMap
+from PubMap import PubMap
 
 # Individual class imports
 from argparse import ArgumentParser
@@ -28,9 +28,9 @@ def sim_cmd():
     """
     # PARSE FOR ALL ARGUMENTS AT COMMAND LINE
     arg_parser = ArgumentParser()
-    arg_parser.add_argument("-n", "--num_agents", type=int, default=1000, help="Number of Agents")
-    arg_parser.add_argument("-v", "--venue_path", type = str, default = "example\st_andrews_distribution.json", help="Path to venues file")
-    arg_parser.add_argument("-d", "--distribution_path", type = str, default="example\st_andrews_venues.json", help="Path to archetype probability distribution")
+    arg_parser.add_argument("-n", "--num_agents", type=int, default=10, help="Number of Agents")
+    arg_parser.add_argument("-v", "--venue_path", type = str, default = "example\StA_venue_data.json", help="Path to venues file")
+    arg_parser.add_argument("-d", "--distribution_path", type = str, default="example\StA_venue_distribution.json", help="Path to start venue probability distribution")
     arg_parser.add_argument("-s", "--seed", type=int, default= 144, help="Random generation seed")
 
     try:
@@ -46,17 +46,18 @@ if __name__ == "__main__":
     args = sim_cmd()
     num_agents = args.num_agents
     venue_path = args.venue_path
-    distribution_path = args.distribution_path
+    venue_distribution_path = args.distribution_path
 
     # Construct the simulation map
-    pub_map = PubMap(num_agents = num_agents, venue_path= venue_path, distribution_path= distribution_path, random_seed= args.seed)
+    pub_map = PubMap(num_agents = num_agents, venue_path= venue_path, venue_distribution_path = venue_distribution_path, seed= args.seed)
 
     # Run the simulation
     for i in range(DURATION):
         pub_map.step()
-        pub_map.send_to_tim()
+        #pub_map.send_to_tim()
 
     # Save the final simulation output parameters.
-    pub_map.out(data=pub_map.get_parameters(), output_path=f"output\{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}\parameters", output_format="json")
+    #pub_map.out(data=pub_map.get_parameters(), output_path=f"output\{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}\parameters", output_format="json")
 
-    print("sim.py!")
+   # print("sim.py!")
+   # print(pub_map)
