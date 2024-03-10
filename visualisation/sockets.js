@@ -9,7 +9,7 @@ export default class TennentsFlowSocket {
     }
 
     initWS = () => {
-        this.ws = new WebSocket(`ws://${window.location.hostname}:${PORT}`)
+        this.ws = new WebSocket(`wss://${window.location.hostname}:${PORT}`)
         this.ws.addEventListener("message", ({ data }) => {
             const event = JSON.parse(data);
 
