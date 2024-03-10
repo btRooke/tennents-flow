@@ -9,6 +9,13 @@ from frontend import pub_sim
 from pubsim.PubMap import PubMap
 from uuid import uuid4
 import os
+import ssl
+
+if "SSL_CERT" in os.environ:
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    ssl_cert = os.environ["SSL_CERT"]
+    ssl_key = os.environ["SSL_KEY"]
+    ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
 
 INIT_EVENT = "init"
 NEXT_STEP = "next_step"
@@ -89,8 +96,14 @@ class SimSocket():
                 await self.handle_next_step(websocket, event)
 
     async def run(self):
-        async with websockets.serve(self._handler, "", self.port):
-            await asyncio.Future()
+
+        if "SSL_CERT" in os.environ:
+            async with websockets.serve(self._handler, "", self.port, ssl=ssl_context):
+                await asyncio.Future()
+        else:
+            async with websockets.serve(self._handler, "", self.port):
+                await asyncio.Future()
+
 
 
 async def handler(websocket):
