@@ -2,7 +2,7 @@
 
 ## Overview
 
-Genericm stochastic micro-economic simulation of public house patronage.
+Generic stochastic micro-economic simulation of public house patronage.
 
 _What would happen if there were a Wetherspoons in St Andrews?_
 
