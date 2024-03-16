@@ -20,7 +20,7 @@ Built in 24 hours for [Hack the Burgh](https://hacktheburghx.devpost.com/) by [T
 
 ### Frontend
 
-- A three.js visualisation of the simulation
+- A three.js visualisation of the simulation.
 
 ## Links
 
